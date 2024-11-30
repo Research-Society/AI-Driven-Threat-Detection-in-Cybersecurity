@@ -1,0 +1,48 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_classification
+
+# Generate synthetic data to simulate cybersecurity threat detection
+# Features represent network traffic data, and target indicates 'safe' or 'threat'.
+X, y = make_classification(n_samples=1000, n_features=10, n_informative=8, n_classes=2, random_state=42)
+
+# Splitting the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Standardizing the features for better performance
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
+# Initialize a Random Forest Classifier (can replace with other models like SVM, Neural Networks)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Model prediction on test data
+y_pred = model.predict(X_test)
+
+
+# Evaluate the model's performance
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+
+
+# Simulate a new data point (e.g., network traffic logs)
+new_data = np.array([[0.5, 1.2, -0.3, 0.8, -1.1, 0.9, 0.4, -0.2, 1.5, 0.7]])
+new_data_scaled = scaler.transform(new_data)
+
+# Predict if the new data point is a threat or safe
+prediction = model.predict(new_data_scaled)
+print("\nThreat Detected!" if prediction[0] == 1 else "No Threat Detected.")
+
+
+
